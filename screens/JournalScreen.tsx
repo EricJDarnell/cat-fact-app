@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, TextInput, Button, FlatList, Text, StyleSheet, ImageBackground } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../components/ThemeContext";
+import useHeaderThemeToggle from "../components/useHeaderThemeToggle";
 
 interface JournalEntry {
     id: string;
@@ -12,6 +13,7 @@ const JournalScreen: React.FC = () => {
     const [entry, setEntry] = useState<string>('');
     const [entries, setEntries] = useState<JournalEntry[]>([]);
     const { theme } = useContext(ThemeContext)!;
+    useHeaderThemeToggle();
 
     const saveEntries = async (updatedEntries: JournalEntry[]): Promise<void> => {
         await AsyncStorage.setItem('entries', JSON.stringify(updatedEntries));
@@ -37,7 +39,7 @@ const JournalScreen: React.FC = () => {
     return (
         <View style={[ styles.container, { backgroundColor: theme.background } ]}>
             <TextInput 
-              style={[styles.input, { backgroundColor: theme.cardBackground, color: theme.primary }]}
+              style={[styles.input, { backgroundColor: theme.cardBackground, color: theme.text }]}
               placeholder="What are you grateful for today?"
               value={entry}
               onChangeText={setEntry}

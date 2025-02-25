@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, TextInput, Button, FlatList, Text, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from "../components/ThemeContext";
+import useHeaderThemeToggle from "../components/useHeaderThemeToggle";
 
 interface Task {
     id: string;
@@ -12,6 +13,7 @@ const TodoScreen: React.FC = () => {
     const [task, setTask] = useState<string>('');
     const [tasks, setTasks] = useState<Task[]>([]);
     const { theme } = useContext(ThemeContext)!;
+    useHeaderThemeToggle();
 
     const saveTasks = async (updatedTasks: Task[]): Promise<void> => {
         await AsyncStorage.setItem('tasks', JSON.stringify(updatedTasks));
@@ -37,7 +39,7 @@ const TodoScreen: React.FC = () => {
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>
             <TextInput 
-              style={[styles.input, { color: theme.text, backgroundColor: theme.background }]}
+              style={[styles.input, { color: theme.text, backgroundColor: theme.cardBackground }]}
               placeholder="Add a task"
               value={task}
               onChangeText={setTask}

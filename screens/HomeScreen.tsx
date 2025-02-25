@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { ThemeContext } from "../components/ThemeContext";
+import useHeaderThemeToggle from "../components/useHeaderThemeToggle";
 
 const HomeScreen: React.FC = () => {
     const [fact, setFact] = useState<string>('');
     const { theme, toggleTheme, isDark } = useContext(ThemeContext)!;
+    useHeaderThemeToggle();
 
     const fetchFact = async (): Promise<void> => {
         try {
@@ -24,10 +26,6 @@ const HomeScreen: React.FC = () => {
         <View style={[styles.container, { backgroundColor: theme.background }]}>
             <Text style={[styles.fact, { color: theme.text, backgroundColor: theme.background }]}>{fact}</Text>
             <Button title="New Cat-Fact" onPress={fetchFact}/>
-            <Button
-              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              onPress={toggleTheme}
-            />
         </View>
     );
 };
