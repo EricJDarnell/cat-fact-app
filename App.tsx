@@ -7,6 +7,7 @@ import HomeScreen from "./screens/HomeScreen";
 import JournalScreen from "./screens/JournalScreen";
 import TodoScreen from "./screens/TodoScreen";
 import { ThemeProvider } from "./components/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
 
 type RootTabParamList = {
   Home: undefined;
@@ -21,9 +22,33 @@ const App:React.FC = () => {
     <ThemeProvider>
       <NavigationContainer>
         <Tab.Navigator initialRouteName="Home">
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Todo" component={TodoScreen}/>
-          <Tab.Screen name="Journal" component={JournalScreen} />
+          <Tab.Screen 
+            name="Home"
+            component={HomeScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="home" color={color} size={size}/>                
+              ),
+            }}
+          />
+          <Tab.Screen 
+            name="Todo"
+            component={TodoScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="list" color={color} size={size}/>
+              )
+            }}
+          />
+          <Tab.Screen
+            name="Journal"
+            component={JournalScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="book" color={color} size={size}/>
+              )
+            }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </ThemeProvider>
