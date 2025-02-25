@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../App"
-
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+import { ThemeContext } from "../components/ThemeContext";
 
 const HomeScreen: React.FC = () => {
     const [fact, setFact] = useState<string>('');
-    const navigation = useNavigation<HomeScreenNavigationProp>();
+    const { theme, toggleTheme, isDark } = useContext(ThemeContext)!;
 
     const fetchFact = async (): Promise<void> => {
         try {
@@ -25,19 +21,13 @@ const HomeScreen: React.FC = () => {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.fact}>{fact}</Text>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
+            <Text style={[styles.fact, { color: theme.text, backgroundColor: theme.background }]}>{fact}</Text>
             <Button title="New Cat-Fact" onPress={fetchFact}/>
-            <View style={styles.navButtons}>
-                <Button
-                  title="Go to To-Do List"
-                  onPress={() => navigation.navigate('Todo')}
-                />
-                <Button
-                  title="Go to Journal"
-                  onPress={() => navigation.navigate('Journal')}
-                />
-            </View>
+            <Button
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              onPress={toggleTheme}
+            />
         </View>
     );
 };
@@ -58,4 +48,5 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
 });
+
 export default HomeScreen;

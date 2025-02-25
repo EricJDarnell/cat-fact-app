@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, TextInput, Button, FlatList, Text, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../App";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-type TodoScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Todo'>;
+import { ThemeContext } from "../components/ThemeContext";
 
 interface Task {
     id: string;
@@ -15,7 +11,7 @@ interface Task {
 const TodoScreen: React.FC = () => {
     const [task, setTask] = useState<string>('');
     const [tasks, setTasks] = useState<Task[]>([]);
-    const navigation = useNavigation<TodoScreenNavigationProp>();
+    const { theme } = useContext(ThemeContext)!;
 
     const saveTasks = async (updatedTasks: Task[]): Promise<void> => {
         await AsyncStorage.setItem('tasks', JSON.stringify(updatedTasks));
@@ -39,9 +35,9 @@ const TodoScreen: React.FC = () => {
     };
 
     return (
-        <View>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
             <TextInput 
-              style={styles.input}
+              style={[styles.input, { color: theme.text, backgroundColor: theme.background }]}
               placeholder="Add a task"
               value={task}
               onChangeText={setTask}
@@ -51,10 +47,6 @@ const TodoScreen: React.FC = () => {
               data={tasks}
               renderItem={({item}) => <Text style={styles.task}>{item.text}</Text>}
               keyExtractor={(item) => item.id}
-            />
-            <Button
-              title="Back to Home"
-              onPress={() => navigation.navigate('Home')}
             />
         </View>
     )

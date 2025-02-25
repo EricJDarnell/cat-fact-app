@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { View, TextInput, Button, FlatList, Text, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../App";
+import React, { useState, useEffect, useContext } from "react";
+import { View, TextInput, Button, FlatList, Text, StyleSheet, ImageBackground } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-type JournalScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Journal'>;
+import { ThemeContext } from "../components/ThemeContext";
 
 interface JournalEntry {
     id: string;
@@ -15,6 +11,7 @@ interface JournalEntry {
 const JournalScreen: React.FC = () => {
     const [entry, setEntry] = useState<string>('');
     const [entries, setEntries] = useState<JournalEntry[]>([]);
+    const { theme } = useContext(ThemeContext)!;
 
     const saveEntries = async (updatedEntries: JournalEntry[]): Promise<void> => {
         await AsyncStorage.setItem('entries', JSON.stringify(updatedEntries));
@@ -38,9 +35,9 @@ const JournalScreen: React.FC = () => {
     };
 
     return (
-        <View>
+        <View style={[ styles.container, { backgroundColor: theme.background } ]}>
             <TextInput 
-              style={styles.input}
+              style={[styles.input, { backgroundColor: theme.cardBackground, color: theme.primary }]}
               placeholder="What are you grateful for today?"
               value={entry}
               onChangeText={setEntry}
@@ -49,11 +46,8 @@ const JournalScreen: React.FC = () => {
             <Button title="Save Entry" onPress={addEntry} />
             <FlatList 
               data={entries}
-              renderItem={({ item }) => <Text style={styles.entry}>{item.text}</Text>}
+              renderItem={({ item }) => <Text style={[styles.entry, { backgroundColor: theme.background, color: theme.text }]}>{item.text}</Text>}
               keyExtractor={(item) => item.id}
-            />
-            <Button
-              title="Return to Home"
             />
         </View>
     )

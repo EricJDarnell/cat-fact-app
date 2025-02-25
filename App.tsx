@@ -2,29 +2,29 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
 import JournalScreen from "./screens/JournalScreen";
 import TodoScreen from "./screens/TodoScreen";
 import { ThemeProvider } from "./components/ThemeContext";
 
-type RootStackParamList = {
+type RootTabParamList = {
   Home: undefined;
   Todo: undefined;
   Journal: undefined;
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const App:React.FC = () => {
   return (
     <ThemeProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Todo" component={TodoScreen}/>
-          <Stack.Screen name="Journal" component={JournalScreen} />
-        </Stack.Navigator>
+        <Tab.Navigator initialRouteName="Home">
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Todo" component={TodoScreen}/>
+          <Tab.Screen name="Journal" component={JournalScreen} />
+        </Tab.Navigator>
       </NavigationContainer>
     </ThemeProvider>
   );
