@@ -41,6 +41,7 @@ const JournalScreen: React.FC = () => {
             <TextInput 
               style={[styles.input, { backgroundColor: theme.cardBackground, color: theme.text }]}
               placeholder="What are you grateful for today?"
+              placeholderTextColor={theme.text}
               value={entry}
               onChangeText={setEntry}
               multiline

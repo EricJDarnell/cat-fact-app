@@ -41,13 +41,14 @@ const TodoScreen: React.FC = () => {
             <TextInput 
               style={[styles.input, { color: theme.text, backgroundColor: theme.cardBackground }]}
               placeholder="Add a task"
+              placeholderTextColor={theme.text}
               value={task}
               onChangeText={setTask}
             />
             <Button title="Add Task" onPress={addTask}/>
             <FlatList 
               data={tasks}
-              renderItem={({item}) => <Text style={styles.task}>{item.text}</Text>}
+              renderItem={({item}) => <Text style={[styles.task, { color: theme.text }]}>{item.text}</Text>}
               keyExtractor={(item) => item.id}
             />
         </View>
