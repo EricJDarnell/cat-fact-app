@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, TextInput, Button, FlatList, Text, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from "../components/ThemeContext";
+import AuthScreen from "./AuthScreen";
 import useHeaderThemeToggle from "../components/useHeaderThemeToggle";
+import { useAuth } from "../components/AuthContext";
 
 interface Task {
     id: string;
@@ -12,6 +14,7 @@ interface Task {
 const TodoScreen: React.FC = () => {
     const [task, setTask] = useState<string>('');
     const [tasks, setTasks] = useState<Task[]>([]);
+    const { token, logout } = useAuth();
     const { theme } = useContext(ThemeContext)!;
     useHeaderThemeToggle();
 
@@ -35,6 +38,10 @@ const TodoScreen: React.FC = () => {
         saveTasks(updatedTasks);
         setTask('');
     };
+
+    if (!token) {
+        return <AuthScreen />;
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>

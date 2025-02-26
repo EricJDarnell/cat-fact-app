@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
+import { useAuth } from "../components/AuthContext";
+import AuthScreen from "./AuthScreen";
 import { ThemeContext } from "../components/ThemeContext";
 import useHeaderThemeToggle from "../components/useHeaderThemeToggle";
 
 const HomeScreen: React.FC = () => {
     const [fact, setFact] = useState<string>('');
-    const { theme, toggleTheme, isDark } = useContext(ThemeContext)!;
+    const { token, logout } = useAuth();
+    const { theme } = useContext(ThemeContext)!;
     useHeaderThemeToggle();
 
     const fetchFact = async (): Promise<void> => {
@@ -21,6 +24,10 @@ const HomeScreen: React.FC = () => {
     useEffect(() => {
         fetchFact();
     }, []);
+
+    if (!token) {
+        return <AuthScreen />;
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>

@@ -87,7 +87,12 @@ app.get('/todos', authenticateToken, (req, res) => {
 
 app.get('/journal', authenticateToken, (req, res) => {
     const userId = req.user.id;
-    db.all(`select * from journal_entries where user_id = ?`, [userId], (err, journal) => {});
+    db.all(`select * from journal_entries where user_id = ?`, [userId], (err, journal) => {
+        if (err) {
+            return res.status(500).json({ message: 'Database error' });
+        }
+        res.json(journal);
+    });
 });
 
 app.post('/todos', authenticateToken, (req, res) => {
@@ -99,11 +104,16 @@ app.post('/todos', authenticateToken, (req, res) => {
 
     db.run(`insert into todos (user_id, task) values (?, ?)`,
         [userId, task],
-        function (err, todo) {
+        function (err) {
             if (err) {
                 return res.status(500).json({ message: 'Database error' });
             }
-            res.status(201).json({ id: this.lastID, task, completed: 0 });
+            db.all(`select * from todos where id = ?`, [this.lastID], (err, todo) => {
+                if (err) {
+                    return res.status(500).json({ message: 'Database error' });
+                }
+                res.status(201).json(todo);
+            });
         }
     );
 });
@@ -121,7 +131,12 @@ app.post('/journal', authenticateToken, (req, res) => {
             if (err) {
                 return res.status(500).json({ message: 'Database error'});
             }
-            res.status(201).json({ id: this.lastID, entry });
+            db.all(`select * from journal_entries where id = ?`, [this.lastID], (err, journal) => {
+                if (err) {
+                    return res.status(500).json({ message: 'Database error' });
+                }
+                res.status(201).json(journal);
+            });
         }
     );
 });

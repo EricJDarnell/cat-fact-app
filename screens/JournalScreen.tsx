@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, TextInput, Button, FlatList, Text, StyleSheet, ImageBackground } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../components/ThemeContext";
+import AuthScreen from "./AuthScreen";
 import useHeaderThemeToggle from "../components/useHeaderThemeToggle";
+import { useAuth } from "../components/AuthContext";
 
 interface JournalEntry {
     id: string;
@@ -12,6 +14,7 @@ interface JournalEntry {
 const JournalScreen: React.FC = () => {
     const [entry, setEntry] = useState<string>('');
     const [entries, setEntries] = useState<JournalEntry[]>([]);
+    const { token, logout } = useAuth();
     const { theme } = useContext(ThemeContext)!;
     useHeaderThemeToggle();
 
@@ -35,6 +38,10 @@ const JournalScreen: React.FC = () => {
         saveEntries(updatedEntries);
         setEntry('');
     };
+
+    if (!token) {
+        return <AuthScreen />;
+    }
 
     return (
         <View style={[ styles.container, { backgroundColor: theme.background } ]}>
